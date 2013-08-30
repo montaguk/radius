@@ -1,0 +1,65 @@
+
+
+
+
+* Things it can do / Characteristics
+** people can leave messages that are associated with location that other people can find when they enter the same location
+*** types of messages
+	- person to person
+	- person to persons
+	- person to group/followers (public is a group)
+*** supported media
+	- text
+	- picture
+	- video
+*** hints are cool
+*** let users know that they have pending messages
+*** standard users have finite number of contemporaneous messages
+	- certain number of private messages
+	- certain number of public messages
+	- all messages decay, especially public
+	- finite number of access (time/accesses) 
+	- configure type of decay (number of accesses or time)
+*** notifications
+	- configurable
+	- notifications hide themselves when you go out of radius
+	- maybe timeout for notification hiding
+** security is a huge issue to consider
+	- validate source of messages
+	- you should be able to block people
+	- high resolution filtering
+	- warnings for public subscription
+	- content checking for public submission ?
+** integration with existing social network ?
+   - facebook
+   - twitter
+   - snapchat?
+   - instagram
+   - google
+** incentivization
+   - upgrade to pro version if you get your friends to download the app
+   - offer ads for free, users rewarded by company for buying app
+** users can rate other users public content
+   - upvote kinda like reddit
+   - filter public content by votes/relevance
+   - certain number of likes per day
+* Why it is marketable
+** For users
+*** ping for message within a certain radius
+    - you get a compass to help you find you location 
+** For businesses
+*** local as well as corporate ads
+*** enterprise users can have a web portal where they can customize their content they can push, user lists, user data
+*** need customizable message creator and information infrastructure
+*** promotional materials
+* Milestones
+** Initial beta release
+*** drop a payload at a geographic location
+	- pictures
+	- videos
+	- maybe like snapchat, put text on pictures
+*** should be able to invite people
+	- by phone number
+	- see if friends have it (people in your contacts)
+** Gold release
+** Platinum release
