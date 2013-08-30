@@ -1,7 +1,6 @@
 <Alloy>
-	<Window class='.container'>
-		<View ns="Ti.Map" id="map">
-			
-		</View>
-	</Window>
+    <Window>
+        <!-- Use the Alloy.Globals.Map namespace to create a map module view -->
+        <View id="mapview" ns="Alloy.Globals.Map" onClick="report" />
+    </Window>
 </Alloy>
