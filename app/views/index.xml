@@ -2,5 +2,7 @@
     <Window>
         <!-- Use the Alloy.Globals.Map namespace to create a map module view -->
         <View id="mapview" ns="Alloy.Globals.Map" onClick="report" userLocation="true" />
+        <Button id="button" onClick="markClick" title="Drop Message!"
+            top="10" width="400" height="100" />
     </Window>
 </Alloy>

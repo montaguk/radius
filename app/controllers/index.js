@@ -2,6 +2,14 @@ function report(evt) {
     Ti.API.info("Annotation " + evt.title + " clicked, id: " + evt.annotation.myid);
 }
 
+function markClick(evt) {
+	Ti.API.info("Mark button clicked");
+	// Get location data
+	// Add annotation to map (this will probably end up being platform specific)
+	// Show message dialog box
+	// Add annotation/pin to map
+}
+
 // API calls to the map module need to use the Alloy.Globals.Map reference
 var mountainView = Alloy.Globals.Map.createAnnotation({
     latitude:37.390749,
