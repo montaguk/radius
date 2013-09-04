@@ -16,7 +16,8 @@ function Controller() {
     $.__views.index && $.addTopLevelView($.__views.index);
     $.__views.mapview = Alloy.Globals.Map.createView({
         id: "mapview",
-        ns: "Alloy.Globals.Map"
+        ns: "Alloy.Globals.Map",
+        userLocation: "true"
     });
     $.__views.index.add($.__views.mapview);
     report ? $.__views.mapview.on("click", report) : __defers["$.__views.mapview!click!report"] = true;
