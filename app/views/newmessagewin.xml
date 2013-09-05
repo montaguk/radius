@@ -1,0 +1,7 @@
+<Alloy>
+	<Window id="newmessagewin" >
+		<Button id="button" onClick="closeWin" title="Close"
+            		top="10" width="400" height="100" />
+            		
+	</Window>
+</Alloy>  

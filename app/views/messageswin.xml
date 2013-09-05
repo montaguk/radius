@@ -1,0 +1,8 @@
+<Alloy>
+	<!-- So far this is all android specific... -->
+	<Tab title="Messages">
+    	<Window id="messageswin" >
+    		
+    	</Window>
+    </Tab>
+</Alloy>
