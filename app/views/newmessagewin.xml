@@ -1,7 +1,9 @@
 <Alloy>
 	<Window id="newmessagewin" >
+        <TextField id="address" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" top="10" left="10" width="900" height="100" />
 		<Button id="button" onClick="closeWin" title="Close"
-            		top="10" width="400" height="100" />
+            		 width="400" height="100" />
+        <ImageView id="imagePreview" width="Ti.UI.FILL" height="Ti.UI.FILL" />
             		
 	</Window>
-</Alloy>  
+</Alloy>

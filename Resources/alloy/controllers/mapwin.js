@@ -2,10 +2,24 @@ function Controller() {
     function report(evt) {
         Ti.API.info("Annotation " + evt.title + " clicked, id: " + evt.annotation.myid);
     }
-    function markButtonClick() {
-        Ti.API.info("Mark button clicked");
+    function captureComplete(media) {
         var controller = Alloy.createController("newmessagewin");
         controller.OpenMainWindow($.maptab);
+        controller.SetupWindow(media);
+    }
+    function markButtonClick() {
+        Ti.API.info("Mark button clicked");
+        var captureButton = Titanium.UI.createButton({
+            title: "Hello",
+            top: 900,
+            width: 400,
+            height: 100
+        });
+        var myOverlay = Titanium.UI.createView();
+        myOverlay.add(captureButton);
+        Titanium.Media.showCamera({
+            success: captureComplete
+        });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "mapwin";

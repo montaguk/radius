@@ -2,13 +2,35 @@ function report(evt) {
     Ti.API.info("Annotation " + evt.title + " clicked, id: " + evt.annotation.myid);
 }
 
+// Called when camera has a picture or video
+function captureComplete(media) {
+	//Titanium.Media.hideCamera();	// iOS only
+	var controller = Alloy.createController("newmessagewin");
+	controller.OpenMainWindow($.maptab);
+	controller.SetupWindow(media);
+}
+
 function markButtonClick(evt) {
 	Ti.API.info("Mark button clicked");
 	
-    var controller = Alloy.createController("newmessagewin");
-    controller.OpenMainWindow($.maptab);
+	// Create the camera overlay
+	//var overlayImage = Titanium.UI.createImageView({});
+	var captureButton = Titanium.UI.createButton({
+		title: 'Hello',
+   		top: 900,	// KGM - Don't hardcode
+   		width: 400,
+   		height: 100
+	});
+	
+	var myOverlay = Titanium.UI.createView();
+	myOverlay.add(captureButton);
+	
+	Titanium.Media.showCamera({
+		// KGM - Disable overlay to speed development
+		//overlay:myOverlay,
+		success:captureComplete
+	});
     
-
 	
 	//Titanium.Geolocation.getCurrentPosition(function(loc) {
 	
