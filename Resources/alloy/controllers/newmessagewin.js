@@ -4,9 +4,13 @@ function Controller() {
     }
     function sendMsg() {
         Ti.API.info("Sending message to map");
-        var image = $.imagePreview.getImage();
+        var i = $.imagePreview.getImage();
+        var t = $.messageText.getValue();
         $.newmessagewin.close();
-        Ti.App.fireEvent("location.updated", image);
+        Ti.App.fireEvent("mapview.drop_message", {
+            image: i,
+            text: t
+        });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "newmessagewin";
@@ -26,8 +30,8 @@ function Controller() {
         height: Ti.UI.FILL
     });
     $.__views.newmessagewin.add($.__views.imagePreview);
-    $.__views.address = Ti.UI.createTextField({
-        id: "address",
+    $.__views.messageText = Ti.UI.createTextField({
+        id: "messageText",
         borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
         color: "#336699",
         top: "1%",
@@ -35,7 +39,7 @@ function Controller() {
         width: "90%",
         height: "8%"
     });
-    $.__views.newmessagewin.add($.__views.address);
+    $.__views.newmessagewin.add($.__views.messageText);
     $.__views.nmwCloseBtn = Ti.UI.createButton({
         id: "nmwCloseBtn",
         title: "Close",

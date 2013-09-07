@@ -61,15 +61,38 @@ function markButtonClick(evt) {
 }
 
 // Callback function that places annotations on the map
-function placeAnnotation(loc, media) {
+function placeAnnotation(loc, message_data) {
+	
+	// Image must be stored to disk before it can be used in
+	// a map annotation.  For now, we'll store the images
+	// in the users applicaiton cache
+	var cache_dir = Titanium.Filesystem.getApplicationCacheDirectory();
+	var im_file = Titanium.Filesystem.getFile('image.jpg');
+	if (im_file.write(message_data.image.media) ) {
+		Ti.API.info("Saved image to user cache " + im_file.nativePath);
+	} else {
+		Ti.API.info("Failed to save image to " + im_file.nativePath);
+	}
+	
+	// Create a view for the annotation
+	var view = Ti.UI.createView({
+		width:Ti.UI.SIZE,
+		height:Ti.UI.SIZE
+	});
+	var imgView = Ti.UI.createImageView({
+		height:300,
+		image:message_data.image
+	});	
+	view.add(imgView);
 	
 	// API calls to the map module need to use the Alloy.Globals.Map reference
 	Ti.API.info("Placing annotation on map at: " + loc.coords.latitude + ', ' + loc.coords.longitude);
 	a = Alloy.Globals.Map.createAnnotation({
     	latitude:loc.coords.latitude,
     	longitude:loc.coords.longitude,
-    	title:"New Message",
-   	 	subtitle:'Message text',
+    	//title:"New Message",
+   	 	subtitle:message_data.text,
+   	 	leftView:view,
     	pincolor:Alloy.Globals.Map.ANNOTATION_BLUE,
 	});
 	
@@ -78,14 +101,13 @@ function placeAnnotation(loc, media) {
 
 // Exported function to drop messages on the map
 // media should be a Blob
-function dropMessage(blob) {
+function dropMessage(message_data) {
 	// Get the current location, and call into the
 	// map placement function when done.
 	Titanium.Geolocation.getCurrentPosition(function(loc) {
 		Ti.API.info("Location found.");
-		placeAnnotation(loc, blob.media);
+		placeAnnotation(loc, message_data);
 	});
-	
 };
 
 // Point the map at the users current location
@@ -97,9 +119,9 @@ Titanium.Geolocation.getCurrentPosition(function(loc) {
 });
 
 // create event Listener to add annotation to map at given location
-Ti.App.addEventListener('mapview.drop_message', function(_blob) {
+Ti.App.addEventListener('mapview.drop_message', function(message_data) {
 	Ti.API.info("maview got event");
-	dropMessage(_blob);
+	dropMessage(message_data);
 });
 
 

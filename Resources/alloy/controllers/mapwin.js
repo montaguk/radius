@@ -21,25 +21,33 @@ function Controller() {
             success: captureComplete
         });
     }
-    function placeAnnotation(loc) {
+    function placeAnnotation(loc, message_data) {
+        Titanium.Filesystem.getApplicationCacheDirectory();
+        var im_file = Titanium.Filesystem.getFile("image.jpg");
+        im_file.write(message_data.image.media) ? Ti.API.info("Saved image to user cache " + im_file.nativePath) : Ti.API.info("Failed to save image to " + im_file.nativePath);
+        var view = Ti.UI.createView({
+            width: Ti.UI.SIZE,
+            height: Ti.UI.SIZE
+        });
+        var imgView = Ti.UI.createImageView({
+            height: 300,
+            image: message_data.image
+        });
+        view.add(imgView);
         Ti.API.info("Placing annotation on map at: " + loc.coords.latitude + ", " + loc.coords.longitude);
         a = Alloy.Globals.Map.createAnnotation({
             latitude: loc.coords.latitude,
             longitude: loc.coords.longitude,
-            title: "New Message",
-            subtitle: "Message text",
+            subtitle: message_data.text,
+            leftView: view,
             pincolor: Alloy.Globals.Map.ANNOTATION_BLUE
         });
         $.mapview.addAnnotation(a);
-        var annotations = $.mapview.getAnnotations();
-        Ti.API.info(annotations);
-        Ti.API.info(a);
-        Ti.API.info($.mapview);
     }
-    function dropMessage(blob) {
+    function dropMessage(message_data) {
         Titanium.Geolocation.getCurrentPosition(function(loc) {
             Ti.API.info("Location found.");
-            placeAnnotation(loc, blob.media);
+            placeAnnotation(loc, message_data);
         });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
@@ -76,6 +84,18 @@ function Controller() {
         id: "maptab"
     });
     $.__views.maptab && $.addTopLevelView($.__views.maptab);
+    $.__views.annotationView = Ti.UI.createView({
+        id: "annotationView",
+        width: Ti.UI.FILL,
+        height: Ti.UI.FILL
+    });
+    $.__views.annotationView && $.addTopLevelView($.__views.annotationView);
+    $.__views.annotationView.imageView = Ti.UI.createImageView({
+        id: "annotationView.imageView",
+        width: Ti.UI.FILL,
+        height: Ti.UI.FILL
+    });
+    $.__views.annotationView.add($.__views.annotationView.imageView);
     exports.destroy = function() {};
     _.extend($, $.__views);
     Titanium.Geolocation.getCurrentPosition(function(loc) {
@@ -89,8 +109,9 @@ function Controller() {
             regionFit: false
         };
     });
-    Ti.App.addEventListener("location.updated", function(_blob) {
-        dropMessage(_blob);
+    Ti.App.addEventListener("mapview.drop_message", function(message_data) {
+        Ti.API.info("maview got event");
+        dropMessage(message_data);
     });
     __defers["$.__views.mapview!click!report"] && $.__views.mapview.on("click", report);
     __defers["$.__views.button!click!markButtonClick"] && $.__views.button.addEventListener("click", markButtonClick);

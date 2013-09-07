@@ -8,4 +8,8 @@
             		top="90%" width="30%" center="50%" height="10%" />                
     	</Window>
     </Tab>
+    
+    <View id="annotationView" width="Ti.UI.FILL" height="Ti.UI.FILL">
+    	<ImageView id="annotationView.imageView" width="Ti.UI.FILL" height="Ti.UI.FILL" />
+    </View>
 </Alloy>

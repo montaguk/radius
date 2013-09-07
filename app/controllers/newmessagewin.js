@@ -7,12 +7,13 @@ function sendMsg(evt) {
 	Ti.API.info("Sending message to map");
 	
 	// Grab the image from the imageview
-	var image = $.imagePreview.getImage();
+	var i = $.imagePreview.getImage();
+	var t  = $.messageText.getValue();
 	
 	$.newmessagewin.close();
 	
 	// Send blob to mapview via an event
-	Ti.App.fireEvent('mapview.drop_message', image);
+	Ti.App.fireEvent('mapview.drop_message', {image:i, text:t});
 }
 
 // Opens the camera and sets up the callback function

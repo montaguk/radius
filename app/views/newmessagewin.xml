@@ -1,7 +1,7 @@
 <Alloy>
 	<Window id="newmessagewin" >
         <ImageView id="imagePreview" width="Ti.UI.FILL" height="Ti.UI.FILL" />
-        <TextField id="address" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" top="1%" center="50%" width="90%" height="8%" />
+        <TextField id="messageText" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" top="1%" center="50%" width="90%" height="8%" />
         <Button id="nmwCloseBtn" onClick="closeWin" title="Close" left="5%" top="90%" width="10%" height="10%" />
         <Button id="nmwSendBtn" onClick="sendMsg" title="Send" right="5%" top="90%" width="10%" height="10%" />
 	</Window>
