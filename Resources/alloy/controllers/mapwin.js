@@ -23,15 +23,24 @@ function Controller() {
     }
     function placeAnnotation(loc) {
         Ti.API.info("Placing annotation on map at: " + loc.coords.latitude + ", " + loc.coords.longitude);
-        var a = Alloy.Globals.Map.createAnnotation({
+        a = Alloy.Globals.Map.createAnnotation({
             latitude: loc.coords.latitude,
             longitude: loc.coords.longitude,
             title: "New Message",
             subtitle: "Message text",
-            pincolor: Alloy.Globals.Map.ANNOTATION_BLUE,
-            myid: 2
+            pincolor: Alloy.Globals.Map.ANNOTATION_BLUE
         });
         $.mapview.addAnnotation(a);
+        var annotations = $.mapview.getAnnotations();
+        Ti.API.info(annotations);
+        Ti.API.info(a);
+        Ti.API.info($.mapview);
+    }
+    function dropMessage(blob) {
+        Titanium.Geolocation.getCurrentPosition(function(loc) {
+            Ti.API.info("Location found.");
+            placeAnnotation(loc, blob.media);
+        });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "mapwin";
@@ -69,12 +78,6 @@ function Controller() {
     $.__views.maptab && $.addTopLevelView($.__views.maptab);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    exports.dropMessage = function(media) {
-        Titanium.Geolocation.getCurrentPosition(function(loc) {
-            Ti.API.info("Location found.");
-            placeAnnotation(loc, media);
-        });
-    };
     Titanium.Geolocation.getCurrentPosition(function(loc) {
         Ti.API.info("Map centered on user location");
         $.mapview.region = {
@@ -85,6 +88,9 @@ function Controller() {
             animate: true,
             regionFit: false
         };
+    });
+    Ti.App.addEventListener("location.updated", function(_blob) {
+        dropMessage(_blob);
     });
     __defers["$.__views.mapview!click!report"] && $.__views.mapview.on("click", report);
     __defers["$.__views.button!click!markButtonClick"] && $.__views.button.addEventListener("click", markButtonClick);

@@ -62,29 +62,28 @@ function markButtonClick(evt) {
 
 // Callback function that places annotations on the map
 function placeAnnotation(loc, media) {
+	
 	// API calls to the map module need to use the Alloy.Globals.Map reference
 	Ti.API.info("Placing annotation on map at: " + loc.coords.latitude + ', ' + loc.coords.longitude);
-	var a = Alloy.Globals.Map.createAnnotation({
+	a = Alloy.Globals.Map.createAnnotation({
     	latitude:loc.coords.latitude,
     	longitude:loc.coords.longitude,
     	title:"New Message",
    	 	subtitle:'Message text',
     	pincolor:Alloy.Globals.Map.ANNOTATION_BLUE,
-    	myid:2 // Custom property to uniquely identify this annotation.
 	});
 	
 	$.mapview.addAnnotation(a);
-	
 }
 
 // Exported function to drop messages on the map
 // media should be a Blob
-exports.dropMessage = function(media) {
+function dropMessage(blob) {
 	// Get the current location, and call into the
 	// map placement function when done.
 	Titanium.Geolocation.getCurrentPosition(function(loc) {
 		Ti.API.info("Location found.");
-		placeAnnotation(loc, media);
+		placeAnnotation(loc, blob.media);
 	});
 	
 };
@@ -96,3 +95,11 @@ Titanium.Geolocation.getCurrentPosition(function(loc) {
 					latitudeDelta:6, longitudeDelta:6,
 					animate:true, regionFit:false};
 });
+
+// create event Listener to add annotation to map at given location
+Ti.App.addEventListener('mapview.drop_message', function(_blob) {
+	Ti.API.info("maview got event");
+	dropMessage(_blob);
+});
+
+

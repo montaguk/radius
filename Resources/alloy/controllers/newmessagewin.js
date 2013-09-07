@@ -5,9 +5,8 @@ function Controller() {
     function sendMsg() {
         Ti.API.info("Sending message to map");
         var image = $.imagePreview.getImage();
-        var controller = Alloy.createController("mapwin");
-        controller.dropMessage(image);
         $.newmessagewin.close();
+        Ti.App.fireEvent("location.updated", image);
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "newmessagewin";

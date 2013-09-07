@@ -9,11 +9,10 @@ function sendMsg(evt) {
 	// Grab the image from the imageview
 	var image = $.imagePreview.getImage();
 	
-	// Send blob to mapview to create an annotation
-	var controller = Alloy.createController("mapwin");
-	controller.dropMessage(image);
-	
 	$.newmessagewin.close();
+	
+	// Send blob to mapview via an event
+	Ti.App.fireEvent('mapview.drop_message', image);
 }
 
 // Opens the camera and sets up the callback function
