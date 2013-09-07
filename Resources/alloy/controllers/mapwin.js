@@ -21,6 +21,18 @@ function Controller() {
             success: captureComplete
         });
     }
+    function placeAnnotation(loc) {
+        Ti.API.info("Placing annotation on map at: " + loc.coords.latitude + ", " + loc.coords.longitude);
+        var a = Alloy.Globals.Map.createAnnotation({
+            latitude: loc.coords.latitude,
+            longitude: loc.coords.longitude,
+            title: "New Message",
+            subtitle: "Message text",
+            pincolor: Alloy.Globals.Map.ANNOTATION_BLUE,
+            myid: 2
+        });
+        $.mapview.addAnnotation(a);
+    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "mapwin";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -42,9 +54,10 @@ function Controller() {
     $.__views.button = Ti.UI.createButton({
         id: "button",
         title: "Drop Message!",
-        top: "10",
-        width: "400",
-        height: "100"
+        top: "90%",
+        width: "30%",
+        center: "50%",
+        height: "10%"
     });
     $.__views.mapwin.add($.__views.button);
     markButtonClick ? $.__views.button.addEventListener("click", markButtonClick) : __defers["$.__views.button!click!markButtonClick"] = true;
@@ -56,15 +69,14 @@ function Controller() {
     $.__views.maptab && $.addTopLevelView($.__views.maptab);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var mountainView = Alloy.Globals.Map.createAnnotation({
-        latitude: 37.390749,
-        longitude: -122.081651,
-        title: "Appcelerator Headquarters",
-        subtitle: "Mountain View, CA",
-        pincolor: Alloy.Globals.Map.ANNOTATION_RED,
-        myid: 1
-    });
+    exports.dropMessage = function(media) {
+        Titanium.Geolocation.getCurrentPosition(function(loc) {
+            Ti.API.info("Location found.");
+            placeAnnotation(loc, media);
+        });
+    };
     Titanium.Geolocation.getCurrentPosition(function(loc) {
+        Ti.API.info("Map centered on user location");
         $.mapview.region = {
             latitude: loc.coords.latitude,
             longitude: loc.coords.longitude,
@@ -74,7 +86,6 @@ function Controller() {
             regionFit: false
         };
     });
-    $.mapview.addAnnotation(mountainView);
     __defers["$.__views.mapview!click!report"] && $.__views.mapview.on("click", report);
     __defers["$.__views.button!click!markButtonClick"] && $.__views.button.addEventListener("click", markButtonClick);
     _.extend($, exports);

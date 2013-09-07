@@ -60,23 +60,39 @@ function markButtonClick(evt) {
 	// Add annotation/pin to map
 }
 
-// API calls to the map module need to use the Alloy.Globals.Map reference
-var mountainView = Alloy.Globals.Map.createAnnotation({
-    latitude:37.390749,
-    longitude:-122.081651,
-    title:"Appcelerator Headquarters",
-    subtitle:'Mountain View, CA',
-    pincolor:Alloy.Globals.Map.ANNOTATION_RED,
-    myid:1 // Custom property to uniquely identify this annotation.
-});
+// Callback function that places annotations on the map
+function placeAnnotation(loc, media) {
+	// API calls to the map module need to use the Alloy.Globals.Map reference
+	Ti.API.info("Placing annotation on map at: " + loc.coords.latitude + ', ' + loc.coords.longitude);
+	var a = Alloy.Globals.Map.createAnnotation({
+    	latitude:loc.coords.latitude,
+    	longitude:loc.coords.longitude,
+    	title:"New Message",
+   	 	subtitle:'Message text',
+    	pincolor:Alloy.Globals.Map.ANNOTATION_BLUE,
+    	myid:2 // Custom property to uniquely identify this annotation.
+	});
+	
+	$.mapview.addAnnotation(a);
+	
+}
 
-// TODO - Replace starting region with users current location
+// Exported function to drop messages on the map
+// media should be a Blob
+exports.dropMessage = function(media) {
+	// Get the current location, and call into the
+	// map placement function when done.
+	Titanium.Geolocation.getCurrentPosition(function(loc) {
+		Ti.API.info("Location found.");
+		placeAnnotation(loc, media);
+	});
+	
+};
+
 // Point the map at the users current location
 Titanium.Geolocation.getCurrentPosition(function(loc) {
+	Ti.API.info("Map centered on user location");
 	$.mapview.region = {latitude:loc.coords.latitude, longitude:loc.coords.longitude,
 					latitudeDelta:6, longitudeDelta:6,
 					animate:true, regionFit:false};
 });
-                    
-
-$.mapview.addAnnotation(mountainView);

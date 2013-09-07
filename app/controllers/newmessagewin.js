@@ -2,6 +2,20 @@ function closeWin(evt) {
 	$.newmessagewin.close();
 }
 
+function sendMsg(evt) {
+	// User wants to send this message
+	Ti.API.info("Sending message to map");
+	
+	// Grab the image from the imageview
+	var image = $.imagePreview.getImage();
+	
+	// Send blob to mapview to create an annotation
+	var controller = Alloy.createController("mapwin");
+	controller.dropMessage(image);
+	
+	$.newmessagewin.close();
+}
+
 // Opens the camera and sets up the callback function
 exports.OpenMainWindow = function(_tab) {
 	// Show contact window
@@ -9,7 +23,7 @@ exports.OpenMainWindow = function(_tab) {
 };
 
 // Accepts the captured media and sets up the new message view
-exports.SetupWindow = function(media) {
+exports.SetupWindow = function(media) {	
 	// Use the camera blob to set the image	
 	Ti.API.info('Captured ' + media.mediaType + ' with error ' + media.error);
 	$.imagePreview.setImage(media.media);
